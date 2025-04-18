@@ -13,11 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Sex {
-  Male
-  Female
-}
-
 model User {
   id            String    @id @default(cuid())
   name          String
@@ -28,6 +23,11 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+
+  posts        Post[]
+  comments     Comment[]
+  commentLikes CommentLike[]
+  postLikes    PostLike[]
 
   @@unique([email])
   @@map("user")
@@ -76,4 +76,69 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+model Post {
+  id       String @id @default(cuid())
+  title    String
+  body     String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
+
+  comments  Comment[]  @relation("PostComments")
+  postLikes PostLike[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("posts")
+}
+
+model PostLike {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+  @@map("postLikes")
+}
+
+model Comment {
+  id   String @id @default(cuid())
+  text String
+
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
+
+  post   Post   @relation("PostComments", fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+
+  parent   Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  parentId String?
+
+  replies Comment[] @relation("CommentReplies")
+
+  commentLikes CommentLike[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("comments")
+}
+
+model CommentLike {
+  id        String  @id @default(cuid())
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, commentId])
+  @@map("commentLikes")
 }

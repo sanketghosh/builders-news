@@ -61,7 +61,7 @@ export default function SignInForm() {
           description: result.success,
         });
         setInterval(() => {}, 1000);
-        router.push("/feed");
+        router.push("/");
       } else {
         setError(result.error);
         toast({
