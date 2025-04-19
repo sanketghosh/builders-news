@@ -1,17 +1,25 @@
 "use client";
 
+// packages
 import React, { useState } from "react";
-import { CommentType } from "./comment-tree";
+
+// local modules
+import { cn } from "@/lib/utils";
+import {
+  CommentWithDetails,
+  CurrentUser,
+} from "@/app/(main)/post/[slug]/_types";
+
+// components
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
 
 interface CommentProps {
-  comment: CommentType;
+  comment: CommentWithDetails;
   addReply: (parentId: string, content: string) => void;
   deleteComment: (id: string) => void;
   toggleLike: (id: string) => void;
-  currentUserEmail: string;
+  currentUser: CurrentUser;
 }
 
 export default function CommentElement({
@@ -19,7 +27,7 @@ export default function CommentElement({
   addReply,
   deleteComment,
   toggleLike,
-  currentUserEmail,
+  currentUser,
 }: CommentProps) {
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [replyText, setReplyText] = useState("");
@@ -32,15 +40,19 @@ export default function CommentElement({
     }
   };
 
-  const isLiked = comment.likedBy.includes(currentUserEmail);
-  const isOwner = comment.userEmail === currentUserEmail;
+  /* const isLiked = comment.likedBy.includes(currentUserEmail);
+  const isOwner = comment.userEmail === currentUserEmail; */
+
+  const isLiked = comment.isLikedByCurrentUser ?? false;
+  const isOwner = currentUser?.id === comment.authorId;
+  const likeCount = comment._count?.commentLikes ?? 0;
 
   return (
     <div className="relative mt-2">
       <div className="rounded-md border p-3 text-sm">
         <div className="flex items-center justify-between">
           <span className="font-semibold text-blue-600 underline underline-offset-2">
-            {comment.userEmail}
+            {comment.author.email}
           </span>
           {isOwner && (
             <button
@@ -52,7 +64,7 @@ export default function CommentElement({
           )}
         </div>
 
-        <p className="mt-2">{comment.content}</p>
+        <p className="mt-2">{comment.text}</p>
 
         <div className="mt-2 flex items-center gap-4 text-xs text-foreground/50">
           <button
@@ -62,7 +74,7 @@ export default function CommentElement({
             )}
             onClick={() => toggleLike(comment.id)}
           >
-            {isLiked ? "Unlike" : "Like"} ({comment.likedBy.length})
+            {isLiked ? "Unlike" : "Like"} ({likeCount})
           </button>
           <button
             className={cn(
@@ -107,7 +119,7 @@ export default function CommentElement({
               addReply={addReply}
               deleteComment={deleteComment}
               toggleLike={toggleLike}
-              currentUserEmail={currentUserEmail}
+              currentUser={currentUser}
             />
           ))}
         </div>

@@ -14,5 +14,10 @@ export const auth = betterAuth({
     enabled: true,
     autoSignIn: false,
   },
+  user: {
+    changeEmail: {
+      enabled: true,
+    },
+  },
   plugins: [nextCookies()],
 });

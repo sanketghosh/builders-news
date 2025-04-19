@@ -1,3 +1,4 @@
+import { CurrentUser } from "@/app/(main)/post/[slug]/_types";
 import { auth } from "@/lib/auth";
 import { SessionDataType } from "@/types";
 import { headers } from "next/headers";

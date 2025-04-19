@@ -6,7 +6,6 @@ import { revalidatePath } from "next/cache";
 // local modules
 import { getSessionData } from "@/utils/get-session";
 import { prisma } from "@/lib/prisma";
-import { ServerActionReturnType } from "@/types";
 
 export async function likePostAction(postId: string) {
   const { authenticatedUserId } = await getSessionData();

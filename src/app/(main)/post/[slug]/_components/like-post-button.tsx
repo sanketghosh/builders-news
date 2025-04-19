@@ -1,11 +1,16 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+// packages
 import { HeartIcon } from "lucide-react";
 import { useState, useTransition } from "react";
-import { likePostAction } from "../_actions/like-post-action";
-import { useToast } from "@/hooks/use-toast";
+
+// local modules
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { likePostAction } from "@/app/(main)/post/[slug]/_actions/like-post-action";
+
+// components
+import { Button } from "@/components/ui/button";
 
 interface ILikePostButtonPropsType {
   postLikes: number;

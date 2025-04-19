@@ -7,7 +7,7 @@ export const getExistingPostLike = async (postId: string) => {
   const existingLike = await prisma.postLike.findUnique({
     where: {
       userId_postId: {
-        userId: authenticatedUserId,
+        userId: authenticatedUserId!,
         postId: postId,
       },
     },

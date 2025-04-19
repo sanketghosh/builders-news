@@ -1,15 +1,17 @@
 // packages
-import { HeartIcon, MessageSquareIcon, MoreVerticalIcon } from "lucide-react";
+import { MessageSquareIcon, MoreVerticalIcon } from "lucide-react";
 
 // local modules
+import { getCommentsForPosts } from "@/app/(main)/post/[slug]/_data-fetchers/get-comments-for-post";
 import { getSinglePost } from "@/app/(main)/post/[slug]/_data-fetchers/get-single-post";
+import { getExistingPostLike } from "@/app/(main)/post/[slug]/_data-fetchers/get-existing-post-like";
+import { getSessionData } from "@/utils/get-session";
+import { CurrentUser } from "@/app/(main)/post/[slug]/_types";
 
 // components
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import LikePostButton from "./_components/like-post-button";
-import { getExistingPostLike } from "./_data-fetchers/get-existing-post-like";
-import CommentTree from "./_components/_comment/comment-tree";
+import LikePostButton from "@/app/(main)/post/[slug]/_components/like-post-button";
+import CommentTree from "@/app/(main)/post/[slug]/_components/_comment/comment-tree";
 
 interface ISinglePostPropsType {
   params: {
@@ -18,10 +20,26 @@ interface ISinglePostPropsType {
 }
 
 export default async function SinglePost({ params }: ISinglePostPropsType) {
+  const sessionData = await getSessionData();
   const { slug } = await params;
   // console.log("@@@ SINGLE POST: ", slug);
+
+  // whole user data we wanna send
+  const currentUser: CurrentUser = sessionData.authenticatedUserId
+    ? {
+        id: sessionData.authenticatedUserId!,
+        name: sessionData.name!,
+        email: sessionData.email!,
+        image: sessionData.image!,
+      }
+    : null;
+
   const { singlePost } = await getSinglePost(slug);
   const { isLiked } = await getExistingPostLike(slug);
+  const initialComments = await getCommentsForPosts({
+    currentUserId: sessionData.authenticatedUserId!,
+    postId: slug,
+  });
 
   return (
     <div className="py-4">
@@ -64,7 +82,11 @@ export default async function SinglePost({ params }: ISinglePostPropsType) {
       </div>
       {/*  comment section */}
       <div className="py-2">
-        <CommentTree />
+        <CommentTree
+          initialComments={initialComments}
+          currentUser={currentUser}
+          postId={slug}
+        />
       </div>
     </div>
   );
