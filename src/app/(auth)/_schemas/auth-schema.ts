@@ -14,8 +14,8 @@ export const SignUpSchema = z
     email: z.string().email({
       message: "A valid email is required",
     }),
-    password: z.string().min(6, {
-      message: "At least 6 characters needed.",
+    password: z.string().min(9, {
+      message: "At least 9 characters needed.",
     }),
     confirmPassword: z.string(),
   })
