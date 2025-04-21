@@ -12,7 +12,16 @@ import { Separator } from "@/components/ui/separator";
 import UpdateName from "@/app/(main)/settings/_components/forms/update-name";
 import UpdateEmail from "@/app/(main)/settings/_components/forms/update-email";
 import UpdatePassword from "@/app/(main)/settings/_components/forms/update-password";
-import DeleteAccountButton from "./_components/buttons/delete-account-button";
+import DeleteAccountButton from "@/app/(main)/settings/_components/buttons/delete-account-button";
+
+export async function generateMetadata() {
+  const { email, name } = await getSessionData();
+
+  return {
+    title: `Settings | ${name}`,
+    description: `Profile settings of ${name} - ${email}`,
+  };
+}
 
 export default async function UpdateProfile() {
   const { email, name } = await getSessionData();

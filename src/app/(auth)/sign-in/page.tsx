@@ -3,19 +3,21 @@ import Link from "next/link";
 
 // local modules
 import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 // components
 import SignInForm from "@/app/(auth)/_components/forms/sign-in-form";
-import { buttonVariants } from "@/components/ui/button";
-import MainLink from "@/components/main-link";
 
 export default function SignIn() {
   return (
     <div className="h-screen">
       <div className="flex h-full">
-        <div className="relative hidden h-full flex-1 select-none bg-primary text-primary-foreground lg:flex lg:flex-col lg:items-center lg:justify-center">
-          <h1 className="font-boldonse text-3xl">BuildersNews</h1>
-          <p className="mt-2 max-w-md text-center font-semibold">
+        <div className="relative hidden h-full flex-1 bg-primary text-primary-foreground lg:flex lg:flex-col lg:items-center lg:justify-center">
+          <Link href={"/"} className="font-boldonse text-3xl">
+            BuildersNews
+          </Link>
+
+          <p className="mt-2 max-w-md select-none text-center font-semibold">
             Share whatever you are building with the world.
           </p>
         </div>

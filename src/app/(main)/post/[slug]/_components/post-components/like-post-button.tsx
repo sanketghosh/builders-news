@@ -1,8 +1,7 @@
 "use client";
 
 // packages
-import { HeartIcon } from "lucide-react";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 
 // local modules
 import { cn } from "@/lib/utils";
@@ -51,16 +50,16 @@ export default function LikePostButton({
     <form onSubmit={handleLikePost}>
       <Button
         size={"sm"}
-        variant={"secondary"}
-        className={cn(isPostLiked && "text-red-500")}
+        variant={"outline"}
+        className={cn(isPostLiked && "text-blue-600")}
       >
-        <HeartIcon
+        {/* <HeartIcon
           className={cn(
             isPostLiked ? "fill-red-500" : "fill-muted-foreground",
             "size-4 stroke-none",
           )}
-        />
-        {postLikes}
+        /> */}
+        {isPostLiked ? "Liked" : "Like"} ({postLikes})
       </Button>
     </form>
   );

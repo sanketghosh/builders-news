@@ -1,24 +1,33 @@
 // packages
-import { SearchIcon } from "lucide-react";
 
-// components
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import PostList from "@/app/(main)/_components/posts/post-list";
+// local modules
+import { SortOrderType } from "@/types";
 import { getAllPosts } from "@/app/(main)/_data-fetchers/get-all-posts";
 
-export default async function Feed() {
-  const { data } = await getAllPosts("latest");
+// components
+import PostList from "@/app/(main)/_components/posts/post-list";
+
+interface FeedSearchParams {
+  searchParams: Promise<{
+    searchQuery?: string;
+    sort: SortOrderType;
+  }>;
+}
+
+export default async function Feed({ searchParams }: FeedSearchParams) {
+  const { searchQuery, sort = "latest" } = await searchParams;
+
+  console.log("@@@SEARCH QUERY: ", searchQuery);
+  console.log("@@@SORT QUERY: ", sort);
+
+  const { data } = await getAllPosts({
+    sort: sort,
+    searchQuery: searchQuery,
+  });
 
   return (
-    <div className="space-y-8">
-      <form className="flex w-full items-center gap-2">
-        <Input placeholder="Search posts in the feed..." />
-        <Button size={"icon"} className="shrink-0">
-          <SearchIcon />
-        </Button>
-      </form>
-      <PostList posts={data} />
+    <div>
+      <PostList sort={sort} searchQuery={searchQuery} posts={data} />
     </div>
   );
 }

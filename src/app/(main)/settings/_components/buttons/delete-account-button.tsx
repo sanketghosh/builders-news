@@ -1,5 +1,14 @@
 "use client";
 
+// packages
+import { Trash2Icon } from "lucide-react";
+import { useTransition } from "react";
+
+// local modules
+import { useToast } from "@/hooks/use-toast";
+import { authClient } from "@/lib/auth-client";
+
+// components
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -11,10 +20,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { authClient } from "@/lib/auth-client";
-import { Trash2Icon } from "lucide-react";
-import { useTransition } from "react";
 
 export default function DeleteAccountButton() {
   const [isPending, startTransition] = useTransition();

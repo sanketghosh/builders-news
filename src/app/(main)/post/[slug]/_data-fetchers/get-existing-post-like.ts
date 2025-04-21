@@ -1,13 +1,21 @@
 import { prisma } from "@/lib/prisma";
 import { getSessionData } from "@/utils/get-session";
 
-export const getExistingPostLike = async (postId: string) => {
+type GetExistingPostLikeType = {
+  postId: string;
+  userId: string;
+};
+
+export const getExistingPostLike = async ({
+  postId,
+  userId,
+}: GetExistingPostLikeType) => {
   const { authenticatedUserId } = await getSessionData();
 
   const existingLike = await prisma.postLike.findUnique({
     where: {
       userId_postId: {
-        userId: authenticatedUserId!,
+        userId: userId,
         postId: postId,
       },
     },

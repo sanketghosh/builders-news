@@ -1,7 +1,14 @@
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { ArrowRightIcon } from "lucide-react";
 import MakePostForm from "./_components/make-post-form";
+import { getSessionData } from "@/utils/get-session";
+
+export async function generateMetadata() {
+  const { email, name } = await getSessionData();
+
+  return {
+    title: `Make A Post ${name}`,
+    description: `Here you can make a post ${name}, your email: ${email}, will be visible in post.`,
+  };
+}
 
 export default function MakePost() {
   return (

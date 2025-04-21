@@ -29,7 +29,7 @@ export default async function Navbar() {
             >
               Make Post
             </Link>
-            <Link href={"/profile"}>
+            <Link href={`/profile/${authenticatedUserId}`}>
               <Avatar>
                 <AvatarFallback>{name?.charAt(0)}</AvatarFallback>
               </Avatar>

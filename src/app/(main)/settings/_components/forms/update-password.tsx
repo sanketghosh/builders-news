@@ -125,7 +125,7 @@ export default function UpdatePassword() {
         <Button size={"default"} variant={"default"} disabled={isPending}>
           {isPending ? (
             <>
-              <Loader2Icon />
+              <Loader2Icon className="animate-spin" />
               Updating
             </>
           ) : (

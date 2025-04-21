@@ -8,8 +8,8 @@ export const SignUpSchema = z
       .min(1, {
         message: "Username of at least four characters needed.",
       })
-      .max(12, {
-        message: "Maximum twelve characters acceptable.",
+      .max(50, {
+        message: "Maximum fifty characters acceptable.",
       }),
     email: z.string().email({
       message: "A valid email is required",

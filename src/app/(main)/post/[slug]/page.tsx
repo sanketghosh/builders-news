@@ -1,17 +1,14 @@
 // packages
-import { MessageSquareIcon, MoreVerticalIcon } from "lucide-react";
+import Link from "next/link";
+import { MoreVerticalIcon } from "lucide-react";
 
 // local modules
-import { getCommentsForPosts } from "@/app/(main)/post/[slug]/_data-fetchers/get-comments-for-post";
 import { getSinglePost } from "@/app/(main)/post/[slug]/_data-fetchers/get-single-post";
-import { getExistingPostLike } from "@/app/(main)/post/[slug]/_data-fetchers/get-existing-post-like";
-import { getSessionData } from "@/utils/get-session";
-import { CurrentUser } from "@/app/(main)/post/[slug]/_types";
 
 // components
 import { Button } from "@/components/ui/button";
-import LikePostButton from "@/app/(main)/post/[slug]/_components/like-post-button";
-import CommentTree from "@/app/(main)/post/[slug]/_components/_comment/comment-tree";
+import PostInteractions from "@/app/(main)/post/[slug]/_components/post-components/post-interactions";
+import CommentSectionWrapper from "@/app/(main)/post/[slug]/_components/comment/comment-section-wrapper";
 
 interface ISinglePostPropsType {
   params: {
@@ -19,36 +16,34 @@ interface ISinglePostPropsType {
   };
 }
 
-export default async function SinglePost({ params }: ISinglePostPropsType) {
-  const sessionData = await getSessionData();
-  const { slug } = await params;
-  // console.log("@@@ SINGLE POST: ", slug);
+export async function generateMetadata({
+  params: { slug },
+}: ISinglePostPropsType) {
+  const { singlePost } = await getSinglePost(slug);
 
-  // whole user data we wanna send
-  const currentUser: CurrentUser = sessionData.authenticatedUserId
-    ? {
-        id: sessionData.authenticatedUserId!,
-        name: sessionData.name!,
-        email: sessionData.email!,
-        image: sessionData.image!,
-      }
-    : null;
+  return {
+    title: singlePost?.title,
+    description: singlePost?.body,
+  };
+}
+
+export default async function SinglePost({ params }: ISinglePostPropsType) {
+  const { slug } = await params;
 
   const { singlePost } = await getSinglePost(slug);
-  const { isLiked } = await getExistingPostLike(slug);
-  const initialComments = await getCommentsForPosts({
-    currentUserId: sessionData.authenticatedUserId!,
-    postId: slug,
-  });
 
   return (
     <div className="py-4">
-      {/* header */}
+      {/* <SinglePostElementWrapper slug={slug} /> */}
+
       <div className="flex items-center justify-between border-b pb-4">
         <div className="leading-tight">
-          <h2 className="text-sm font-semibold md:text-base">
+          <Link
+            href={`/profile/${singlePost?.author.id}`}
+            className="text-sm font-semibold transition-all hover:text-blue-600 md:text-base"
+          >
             {singlePost?.author.email}
-          </h2>
+          </Link>
           <p className="text-xs font-medium text-muted-foreground">
             Posted on {singlePost?.createdAt.toDateString()}
           </p>
@@ -68,26 +63,15 @@ export default async function SinglePost({ params }: ISinglePostPropsType) {
           {singlePost?.body}
         </p>
       </div>
-      {/* footer */}
-      <div className="flex items-center space-x-4 py-4 font-medium text-muted-foreground">
-        <LikePostButton
-          postLikes={singlePost?._count.postLikes || 0}
-          postId={slug}
-          isPostLiked={isLiked}
-        />
-        <Button size={"sm"} variant={"secondary"}>
-          <MessageSquareIcon className="fill-muted-foreground stroke-none" />
-          {singlePost?._count.comments}
-        </Button>
-      </div>
-      {/*  comment section */}
-      <div className="py-2">
-        <CommentTree
-          initialComments={initialComments}
-          currentUser={currentUser}
-          postId={slug}
-        />
-      </div>
+      <PostInteractions
+        slug={slug}
+        commentsNumber={singlePost?._count.comments!}
+        postLikes={singlePost?._count.postLikes!}
+      />
+      <CommentSectionWrapper
+        commentsNumber={singlePost?._count.comments!}
+        slug={slug}
+      />
     </div>
   );
 }

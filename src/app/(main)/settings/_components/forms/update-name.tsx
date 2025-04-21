@@ -89,7 +89,7 @@ export default function UpdateName({ name }: IUpdateNamePropsType) {
         <Button size={"default"} variant={"default"} disabled={isPending}>
           {isPending ? (
             <>
-              <Loader2Icon />
+              <Loader2Icon className="animate-spin" />
               Updating
             </>
           ) : (

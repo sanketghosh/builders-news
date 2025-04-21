@@ -1,6 +1,8 @@
+// packages
 import type { Metadata } from "next";
-import Link from "next/link";
-import Navbar from "./_components/navbar";
+
+// components
+import Navbar from "@/app/(main)/_components/navbar";
 
 export const metadata: Metadata = {
   title: "BuildersNews | Feed",

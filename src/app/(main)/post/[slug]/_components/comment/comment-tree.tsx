@@ -19,7 +19,7 @@ import {
 // components
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import CommentElement from "@/app/(main)/post/[slug]/_components/_comment/comment-element";
+import CommentElement from "@/app/(main)/post/[slug]/_components/comment/comment-element";
 
 export interface CommentType {
   id: string;
