@@ -39,7 +39,7 @@ export default async function UpdateProfile() {
 
       <div className="flex items-center gap-4">
         <Link
-          href={"/profile"}
+          href={"/"}
           className={cn(
             buttonVariants({
               size: "default",

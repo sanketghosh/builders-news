@@ -11,14 +11,13 @@ import PostInteractions from "@/app/(main)/post/[slug]/_components/post-componen
 import CommentSectionWrapper from "@/app/(main)/post/[slug]/_components/comment/comment-section-wrapper";
 
 interface ISinglePostPropsType {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-export async function generateMetadata({
-  params: { slug },
-}: ISinglePostPropsType) {
+export async function generateMetadata({ params }: ISinglePostPropsType) {
+  const { slug } = await params;
   const { singlePost } = await getSinglePost(slug);
 
   return {

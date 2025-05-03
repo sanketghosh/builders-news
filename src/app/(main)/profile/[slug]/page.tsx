@@ -6,14 +6,13 @@ import ProfileDataCard from "@/app/(main)/profile/[slug]/_components/profile-dat
 import UsersPostsList from "@/app/(main)/profile/[slug]/_components/users-posts-list";
 
 interface IUserProfilePropsType {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-export async function generateMetadata({
-  params: { slug },
-}: IUserProfilePropsType) {
+export async function generateMetadata({ params }: IUserProfilePropsType) {
+  const { slug } = await params;
   const { profileUserData } = await getProfileUserDataById(slug);
 
   return {
