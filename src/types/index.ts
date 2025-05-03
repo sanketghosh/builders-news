@@ -8,3 +8,9 @@ export type SessionDataType = {
   email: string | undefined;
   image: string | null | undefined;
 };
+
+export type NavbarDataType = {
+  href: string;
+  label: string;
+  variant: string;
+};
